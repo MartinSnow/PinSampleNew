@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="eP2-6f-Uy3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -122,7 +122,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="qee-H4-b5p"/>
                     <navigationItem key="navigationItem" title="On The Map" id="WF2-b3-Zs3">
-                        <barButtonItem key="leftBarButtonItem" image="Pin" id="t8Y-gb-MHM">
+                        <barButtonItem key="leftBarButtonItem" image="pin" id="t8Y-gb-MHM">
                             <connections>
                                 <action selector="postPin:" destination="z3l-KE-1Jx" id="QDF-DZ-HbU"/>
                             </connections>
@@ -321,7 +321,7 @@ today?</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="StudentCell" id="RCu-lB-X0Z">
-                                        <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RCu-lB-X0Z" id="a1I-wj-Sfg">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -353,8 +353,8 @@ today?</string>
         </scene>
     </scenes>
     <resources>
-        <image name="Pin" width="32" height="32"/>
         <image name="list" width="32" height="32"/>
         <image name="map" width="32" height="32"/>
+        <image name="pin" width="32" height="32"/>
     </resources>
 </document>
