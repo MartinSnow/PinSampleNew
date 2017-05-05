@@ -97,12 +97,10 @@
 		D8758ED61EB0D4BC00556BB0 /* PinSampleNew */ = {
 			isa = PBXGroup;
 			children = (
+				D8758F061EBC5AD200556BB0 /* Supporting files */,
+				D8758F051EBC5A9D00556BB0 /* Assets */,
 				D8758ED71EB0D4BC00556BB0 /* AppDelegate.swift */,
 				D8758ED91EB0D4BC00556BB0 /* ViewController.swift */,
-				D8758EDB1EB0D4BC00556BB0 /* Main.storyboard */,
-				D8758EDE1EB0D4BC00556BB0 /* Assets.xcassets */,
-				D8758EE01EB0D4BC00556BB0 /* LaunchScreen.storyboard */,
-				D8758EE31EB0D4BC00556BB0 /* Info.plist */,
 			);
 			path = PinSampleNew;
 			sourceTree = "<group>";
@@ -123,6 +121,24 @@
 				D8758EF91EB0D4BC00556BB0 /* Info.plist */,
 			);
 			path = PinSampleNewUITests;
+			sourceTree = "<group>";
+		};
+		D8758F051EBC5A9D00556BB0 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				D8758EDB1EB0D4BC00556BB0 /* Main.storyboard */,
+				D8758EDE1EB0D4BC00556BB0 /* Assets.xcassets */,
+				D8758EE01EB0D4BC00556BB0 /* LaunchScreen.storyboard */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		D8758F061EBC5AD200556BB0 /* Supporting files */ = {
+			isa = PBXGroup;
+			children = (
+				D8758EE31EB0D4BC00556BB0 /* Info.plist */,
+			);
+			name = "Supporting files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -514,6 +530,7 @@
 				D8758EFE1EB0D4BC00556BB0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D8758EFF1EB0D4BC00556BB0 /* Build configuration list for PBXNativeTarget "PinSampleNewTests" */ = {
 			isa = XCConfigurationList;
@@ -522,6 +539,7 @@
 				D8758F011EB0D4BC00556BB0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D8758F021EB0D4BC00556BB0 /* Build configuration list for PBXNativeTarget "PinSampleNewUITests" */ = {
 			isa = XCConfigurationList;
@@ -530,6 +548,7 @@
 				D8758F041EB0D4BC00556BB0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
