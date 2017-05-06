@@ -50,7 +50,11 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
             let newUniqueKey = StudentInformation.newStudent.uniqueKey
             print ("newUniqueKey is \(newUniqueKey)")
             
-            self.postAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon)
+            self.postAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon){(objectId, errorString) in
+                
+                self.PUTtingAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId!)
+            
+            }
             
             let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
             self.present(controller, animated: true, completion: nil)
@@ -64,7 +68,7 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
         alert.show(alert, sender: Any.self)
     }
     
-    private func postAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String) {
+    private func postAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, _ completionHandlerForPostAStudentLocation: @escaping (_ objectId: String?, _ errorString: String?) -> Void) {
         
         let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.httpMethod = "POST"
@@ -80,8 +84,45 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
             print ("post student location:")
             print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
             
+            let parsedResult: [String:AnyObject]!
+            
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print ("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            guard let objectId = parsedResult["objectId"] as? String else {
+                print ("There is no objectId")
+                return
+            }
+            
+            completionHandlerForPostAStudentLocation(objectId, nil)
+            
         }
         task.resume()
     
+    }
+    
+    private func PUTtingAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, objectId: String) {
+        
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(objectId)"
+        let url = URL(string: urlString)
+        let request = NSMutableURLRequest(url: url!)
+        request.httpMethod = "PUT"
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"Ma\", \"lastName\": \"Ding\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://www.baidu.com\",\"latitude\": \(newLat), \"longitude\": \(newLat)}".data(using: String.Encoding.utf8)
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error…
+                return
+            }
+            print ("Put A StudentLocation Information.")
+            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
+        }
+        task.resume()
     }
 }

@@ -104,7 +104,9 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             }
             
             // When the array is complete, we add the annotations to the map.
-            self.mapView.addAnnotations(annotations)
+            performUIUpdatesOnMain {
+                self.mapView.addAnnotations(annotations)
+            }
         }
         
         //我的self.taskGetAStudentLocation()
@@ -183,9 +185,7 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             
             StudentInformation.student.studentInformation = results
             
-            performUIUpdatesOnMain {
-                completionHandlerForStudentLocations(true, StudentInformation.student.studentInformation, nil)
-            }
+            completionHandlerForStudentLocations(true, StudentInformation.student.studentInformation, nil)
             //print("data: \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
         }
         task.resume()
