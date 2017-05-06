@@ -21,6 +21,7 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.searchLocation(address: address)
+        
     }
     
     
