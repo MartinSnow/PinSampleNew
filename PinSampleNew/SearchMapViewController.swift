@@ -53,9 +53,13 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
             
             self.postAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon){(objectId, errorString) in
                 
-                self.PUTtingAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId!)
+                self.PUTtingAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId!){(updateAt, errorString) in
+                    self.getMyOwnLocation(updateAt: updateAt)
+                }
             
             }
+            
+            
             
             let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
             self.present(controller, animated: true, completion: nil)
@@ -106,7 +110,7 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
     
     }
     
-    private func PUTtingAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, objectId: String) {
+    private func PUTtingAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, objectId: String, _ completionHandlerForPUTtingAStudentLocation: @escaping (_ updateAt: String, _ errorString: String?) -> Void) {
         
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(objectId)"
         let url = URL(string: urlString)
@@ -123,6 +127,53 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
             }
             print ("Put A StudentLocation Information.")
             print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
+            
+            let parsedResult: [String:AnyObject]!
+            
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print ("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            guard let updateAt = parsedResult["updateAt"] as? String else {
+                print ("There is no updateAt")
+                return
+            }
+            
+            completionHandlerForPUTtingAStudentLocation(updateAt, nil)
+        }
+        task.resume()
+    }
+    
+    private func getMyOwnLocation(updateAt: String) {
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=10&skip=400&order=-\(updateAt)")!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error...
+                return
+            }
+            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
+            
+            let parsedResult: [String:AnyObject]!
+            
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                print ("Could not parse the data as JSON: '\(data)'")
+                return
+            }
+            
+            guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
+                print ("There is no reslut")
+                return
+            }
+            
+            StudentInformation.student.studentInformation.append(contentsOf: results)
+            
         }
         task.resume()
     }
