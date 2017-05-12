@@ -28,8 +28,13 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     @IBAction func postPin(_ sender: AnyObject) {
-        if StudentInformation.newStudent.objectId == nil {}
-        self.postPinAlert()
+        if StudentInformation.newStudent.objectId == "" {
+          let controller = self.storyboard!.instantiateViewController(withIdentifier: "InformationPuttingViewController")
+          self.present(controller, animated: true, completion: nil)
+        } else {
+          self.postPinAlert()
+        }
+        
     }
     
     @IBAction func logout(_ sender: AnyObject) {
@@ -193,26 +198,10 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
         task.resume()
     }
     
-    /*func taskGetAStudentLocation(/*_ completionHandlerForAStudentLocation: @escaping (_ success: Bool, _ locationJSON: [[String:AnyObject]]?, _ errorString: String?) -> Void*/) {
-        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
-        let url = URL(string: urlString)
-        let request = NSMutableURLRequest(url: url!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error
-                return
-            }
-            print("taskGetAStudentLocation data is \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
-        }
-        task.resume()
-    }*/
-    
     func postPinAlert() {
         let alertController = UIAlertController(title: nil, message: "You Have Already Posted a Student Location. Would You Like to Overwrite Your Current Location?", preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel){(action) in
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "InformationPostingViewController")
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "InformationPuttingViewController")
             self.present(controller, animated: true, completion: nil)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil)
