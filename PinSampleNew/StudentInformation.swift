@@ -21,7 +21,6 @@ struct StudentInformation {
     //StudentInformation
     struct student {
         static var studentInformation = [[String:AnyObject]]()
-        static var objectId = ""
     }
     
 
@@ -37,6 +36,7 @@ struct StudentInformation {
     struct newStudent {
         static var address = ""
         static var uniqueKey = ""
+        static var objectId = ""
     }
 }
 

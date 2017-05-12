@@ -53,7 +53,7 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
             
             self.postAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon){(objectId, errorString) in
                 
-                self.PUTtingAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId!)
+                //self.PUTtingAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId!)
             }
             
             let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")

@@ -28,6 +28,7 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
     @IBOutlet weak var mapView: MKMapView!
     
     @IBAction func postPin(_ sender: AnyObject) {
+        if StudentInformation.newStudent.objectId == nil {}
         self.postPinAlert()
     }
     
@@ -187,7 +188,7 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             }
             
             completionHandlerForStudentLocations(true, StudentInformation.student.studentInformation, nil)
-            print("taskGetStudentLocations data: \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
+            //print("taskGetStudentLocations data: \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
         }
         task.resume()
     }
