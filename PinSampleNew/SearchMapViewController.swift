@@ -49,17 +49,12 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
             let newLon = String(placeMarks[0].coordinate.longitude)
             let newAddress = placeMarks[0].description
             let newUniqueKey = StudentInformation.newStudent.uniqueKey
-            print ("newUniqueKey is \(newUniqueKey)")
+            print ("newUniqueKey is \(newUniqueKey), newLat is \(newLat), newLon is \(newLon)")
             
             self.postAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon){(objectId, errorString) in
                 
-                self.PUTtingAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId!){(updateAt, errorString) in
-                    self.getMyOwnLocation(updateAt: updateAt)
-                }
-            
+                self.PUTtingAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId!)
             }
-            
-            
             
             let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
             self.present(controller, animated: true, completion: nil)
@@ -80,7 +75,7 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"Ma\", \"lastName\": \"Ding\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://www.baidu.com\",\"latitude\": \(newLat), \"longitude\": \(newLon)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"马\", \"lastName\": \"丁\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://www.baidu.com\",\"latitude\": \(newLat), \"longitude\": \(newLon)}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
@@ -110,7 +105,7 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
     
     }
     
-    private func PUTtingAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, objectId: String, _ completionHandlerForPUTtingAStudentLocation: @escaping (_ updateAt: String, _ errorString: String?) -> Void) {
+    private func PUTtingAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, objectId: String) {
         
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(objectId)"
         let url = URL(string: urlString)
@@ -127,53 +122,6 @@ class SearchMapViewController: UIViewController, MKMapViewDelegate {
             }
             print ("Put A StudentLocation Information.")
             print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-            
-            let parsedResult: [String:AnyObject]!
-            
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-            } catch {
-                print ("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            
-            guard let updateAt = parsedResult["updateAt"] as? String else {
-                print ("There is no updateAt")
-                return
-            }
-            
-            completionHandlerForPUTtingAStudentLocation(updateAt, nil)
-        }
-        task.resume()
-    }
-    
-    private func getMyOwnLocation(updateAt: String) {
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=10&skip=400&order=-\(updateAt)")!)
-        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
-        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
-        let session = URLSession.shared
-        let task = session.dataTask(with: request as URLRequest) { data, response, error in
-            if error != nil { // Handle error...
-                return
-            }
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
-            
-            let parsedResult: [String:AnyObject]!
-            
-            do {
-                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
-            } catch {
-                print ("Could not parse the data as JSON: '\(data)'")
-                return
-            }
-            
-            guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
-                print ("There is no reslut")
-                return
-            }
-            
-            StudentInformation.student.studentInformation.append(contentsOf: results)
-            
         }
         task.resume()
     }

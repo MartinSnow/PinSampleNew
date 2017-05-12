@@ -68,8 +68,8 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             
             for dictionary in locations {
                 
-                if let lat = dictionary["latitude"] as? Double, let long = dictionary["longitude"] as? Double {
-                    print ("lat is \(lat), long is \(long)")
+                if let lat = dictionary["latitude"] as? Double, let long = dictionary["longitude"] as? Double, let firstName =  dictionary["firstName"] as? String, let lastName = dictionary["lastName"] as? String {
+                    print ("firstName is \(firstName), lastName is \(lastName), lat is \(lat), long is \(long)")
                     
                     // The lat and long are used to create a CLLocationCoordinates2D instance.
                     let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -108,10 +108,7 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
                 self.mapView.addAnnotations(annotations)
             }
         }
-        
-        //我的self.taskGetAStudentLocation()
-        //我的self.taskPostAStudentLocation()
-        //我的self.taskPutAStudentLocation()
+        //self.taskGetAStudentLocation()
         
     }
     
@@ -160,7 +157,7 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
     
     //我的GETting Student Locations
     func taskGetStudentLocations(_ completionHandlerForStudentLocations: @escaping (_ success: Bool, _ locationJSON: [[String:AnyObject]]?, _ errorString: String?) -> Void) {
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=10&skip=400&order=-updatedAt")!)
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         let session = URLSession.shared
@@ -168,28 +165,48 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             if error != nil { // Handle error...
                 return
             }
-            
             let parsedResult: [String:AnyObject]!
-            
             do {
                 parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
             } catch {
                 print ("Could not parse the data as JSON: '\(data)'")
                 return
             }
-            
             guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
                 print ("There is no reslut")
                 return
             }
             
-            StudentInformation.student.studentInformation = results
+            var n = 1
+            StudentInformation.student.studentInformation.append(results[0])
+            for studentInformation in results {
+                if studentInformation["uniqueKey"] as? String != results[n - 1]["uniqueKey"] as? String {
+                    StudentInformation.student.studentInformation.append(results[n])
+                }
+                n += 1
+            }
             
             completionHandlerForStudentLocations(true, StudentInformation.student.studentInformation, nil)
-            //print("data: \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
+            print("taskGetStudentLocations data: \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
         }
         task.resume()
     }
+    
+    /*func taskGetAStudentLocation(/*_ completionHandlerForAStudentLocation: @escaping (_ success: Bool, _ locationJSON: [[String:AnyObject]]?, _ errorString: String?) -> Void*/) {
+        let urlString = "https://parse.udacity.com/parse/classes/StudentLocation"
+        let url = URL(string: urlString)
+        let request = NSMutableURLRequest(url: url!)
+        request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
+        request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
+        let session = URLSession.shared
+        let task = session.dataTask(with: request as URLRequest) { data, response, error in
+            if error != nil { // Handle error
+                return
+            }
+            print("taskGetAStudentLocation data is \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
+        }
+        task.resume()
+    }*/
     
     func postPinAlert() {
         let alertController = UIAlertController(title: nil, message: "You Have Already Posted a Student Location. Would You Like to Overwrite Your Current Location?", preferredStyle: UIAlertControllerStyle.alert)
