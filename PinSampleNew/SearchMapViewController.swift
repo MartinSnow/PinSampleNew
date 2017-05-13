@@ -11,6 +11,11 @@ import MapKit
 
 class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
     var address = StudentInformation.newStudent.address
     
     @IBOutlet weak var mapView: MKMapView!
@@ -19,6 +24,7 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        shareLink.delegate = self
     }
     
     @IBAction func submit(_ sender: AnyObject) {
@@ -111,7 +117,7 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"马\", \"lastName\": \"丁\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"\(mediaURL)\",\"latitude\": \(newLat), \"longitude\": \(newLon)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"马\", \"lastName\": \"丁\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"www.google.com\",\"latitude\": \(newLat), \"longitude\": \(newLon)}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
@@ -160,10 +166,5 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
             print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
         }
         task.resume()
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }
