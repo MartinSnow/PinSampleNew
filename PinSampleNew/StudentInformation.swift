@@ -12,6 +12,17 @@ import UIKit
 
 struct StudentInformation {
     
+    // properties
+    var objectId: String
+    var latitude: Float
+    var longitude: Float
+    var mediaURL: String
+    var firstName: String
+    var lastName: String
+    var mapString: String
+    var uniqueKey: String
+
+    
     // UdacityClient authenticate
     struct UdacityClient {
         static var username = ""

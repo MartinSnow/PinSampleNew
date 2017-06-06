@@ -45,7 +45,7 @@ extension UdacityClient {
             
             if let error = error {
                 print(error)
-                completionHandlerForUserID(false, nil, "Login Failed (User ID).")
+                completionHandlerForUserID(false, nil, "Couldn't connect to the Internet.")
             } else {
                 if let account = result?["account"] as? [String:AnyObject] {
                     if let userId = account["key"] as? String {
