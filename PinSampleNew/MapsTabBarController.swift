@@ -62,7 +62,7 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
         UdacityClient.sharedInstance().taskGetStudentLocations(){(success, locationJSON, errorString) in
             
             // The "locations" array is an array of dictionary objects that are similar to the JSON data that you can download from parse.
-            let locations = StudentInformation.student.studentInformation
+            let locations = studentProperty.studentInformation
             //print ("locations: \(locations)")
             
             // We will create an MKPointAnnotation for each dictionary in "locations". The
@@ -75,15 +75,15 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             
             for dictionary in locations {
                 
-                if let lat = dictionary["latitude"] as? Double, let long = dictionary["longitude"] as? Double, let firstName =  dictionary["firstName"] as? String, let lastName = dictionary["lastName"] as? String {
+                if let lat = dictionary.latitude as? Float, let long = dictionary.longitude as? Float, let firstName =  dictionary.firstName as? String, let lastName = dictionary.lastName as? String {
                     print ("firstName is \(firstName), lastName is \(lastName), lat is \(lat), long is \(long)")
                     
                     // The lat and long are used to create a CLLocationCoordinates2D instance.
-                    let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+                    let coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(long))
                     
-                    let first = dictionary["firstName"] as! String
-                    let last = dictionary["lastName"] as! String
-                    guard let mediaURL = dictionary["mediaURL"] as? String else {
+                    let first = dictionary.firstName
+                    let last = dictionary.lastName
+                    guard let mediaURL = dictionary.mediaURL as? String else {
                         print ("there is no mediaURL")
                         return
                     }

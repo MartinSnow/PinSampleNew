@@ -54,7 +54,7 @@
                                                     </button>
                                                 </subviews>
                                             </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Error Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="676-vL-ual" userLabel="Debug Text Label">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="676-vL-ual" userLabel="Debug Text Label">
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -120,14 +120,14 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="qee-H4-b5p"/>
                     <navigationItem key="navigationItem" title="On The Map" id="WF2-b3-Zs3">
-                        <barButtonItem key="leftBarButtonItem" image="pin" id="t8Y-gb-MHM">
-                            <connections>
-                                <action selector="postPin:" destination="z3l-KE-1Jx" id="QDF-DZ-HbU"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="cancel" id="HHV-xP-W68">
+                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="HHV-xP-W68">
                             <connections>
                                 <action selector="logout:" destination="z3l-KE-1Jx" id="an2-HL-Ee6"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="pin" id="t8Y-gb-MHM">
+                            <connections>
+                                <action selector="postPin:" destination="z3l-KE-1Jx" id="QDF-DZ-HbU"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -285,7 +285,18 @@
                             <constraint firstAttribute="trailingMargin" secondItem="GBj-g9-Yu9" secondAttribute="trailing" constant="-16" id="ng5-7m-wwI"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="ikn-qd-hWj"/>
+                    <navigationItem key="navigationItem" id="ikn-qd-hWj">
+                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="cancel" id="LBc-g1-Uf8">
+                            <connections>
+                                <action selector="logout:" destination="xIe-MK-uJW" id="cop-GI-l9R"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="pin" id="9MA-7C-ILO">
+                            <connections>
+                                <action selector="postPin:" destination="xIe-MK-uJW" id="nZr-UD-O7G"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="GBj-g9-Yu9" id="1an-Rv-nxm"/>
                     </connections>

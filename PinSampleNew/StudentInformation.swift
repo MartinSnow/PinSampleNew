@@ -10,9 +10,10 @@ import UIKit
 
 // MARK: - Constants
 
-struct StudentInformation {
+struct studentProperty {
     
     // properties
+    var createdAt: String
     var objectId: String
     var latitude: Float
     var longitude: Float
@@ -21,19 +22,33 @@ struct StudentInformation {
     var lastName: String
     var mapString: String
     var uniqueKey: String
-
+    var updateAt: String
     
+    init(dictionary: [String: AnyObject]) {
+        createdAt = dictionary["createdAt"] as! String
+        objectId = dictionary["objectId"] as! String
+        latitude = dictionary["latitude"] as! Float
+        longitude = dictionary["longitude"] as! Float
+        mediaURL = dictionary["mediaURL"] as! String
+        firstName = dictionary["firstName"] as! String
+        lastName = dictionary["lastName"] as! String
+        mapString = dictionary["mapString"] as! String
+        uniqueKey = dictionary["uniqueKey"] as! String
+        updateAt = dictionary["updateAt"] as! String
+    }
+    
+    static var studentInformation = [studentProperty]()
+    static var studentInformation2 = [[studentProperty]]()
+
+}
+
+struct StudentInformation {
+
     // UdacityClient authenticate
     struct UdacityClient {
         static var username = ""
         static var password = ""
     }
-    
-    //StudentInformation
-    struct student {
-        static var studentInformation = [[String:AnyObject]]()
-    }
-    
 
     
     // MARK: UI
@@ -48,6 +63,7 @@ struct StudentInformation {
         static var address = ""
         static var uniqueKey = ""
         static var objectId = ""
+        static var name = ""
     }
 }
 

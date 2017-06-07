@@ -12,7 +12,31 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBOutlet weak var tableView: UITableView!
     
-    var studentInformation = [[String: AnyObject]]()
+    @IBAction func logout(_ sender: AnyObject) {
+        UdacityClient.sharedInstance().deleteViewController() {(success, errorString) in
+            if success {
+                performUIUpdatesOnMain {
+                    self.dismiss(animated: true, completion: nil)
+                    /*let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
+                     self.present(controller, animated: true, completion: nil)*/
+                }
+            } else {
+                print (errorString)
+            }
+        }
+    }
+    
+    @IBAction func postPin(_ sender: AnyObject) {
+        if StudentInformation.newStudent.objectId == "" {
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "InformationPuttingViewController")
+            self.present(controller, animated: true, completion: nil)
+        } else {
+            self.postPinAlert()
+        }
+    }
+    
+    
+    var studentInformation = [studentProperty]()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
@@ -25,15 +49,15 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        studentInformation = StudentInformation.student.studentInformation
+        studentInformation = studentProperty.studentInformation
         return studentInformation.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "StudentCell", for: indexPath)
         let match = self.studentInformation[(indexPath as IndexPath).row]
-        let firstName = match["firstName"] as? String
-        let lastName = match["lastName"] as? String
+        let firstName = match.firstName as! String
+        let lastName = match.lastName as! String
         cell.textLabel!.text = "\(firstName) \(lastName)"
         return cell
     }
@@ -42,10 +66,22 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let app = UIApplication.shared
         let studentInformation = self.studentInformation[(indexPath as IndexPath).row]
-        if let toOpen = studentInformation["mediaURL"] as? String {
+        if let toOpen = studentInformation.mediaURL as? String {
             app.openURL(URL(string: toOpen)!)
         }
     }
     
+    func postPinAlert() {
+        let alertController = UIAlertController(title: nil, message: "You Have Already Posted a Student Location. Would You Like to Overwrite Your Current Location?", preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel){(action) in
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "InformationPuttingViewController")
+            self.present(controller, animated: true, completion: nil)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil)
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
 
 }

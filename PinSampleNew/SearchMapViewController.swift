@@ -60,14 +60,16 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
             let newLon = String(placeMarks[0].coordinate.longitude)
             let newAddress = placeMarks[0].description
             let newUniqueKey = StudentInformation.newStudent.uniqueKey
+            let newFirstName = StudentInformation.newStudent.name
+            let newLastName = StudentInformation.newStudent.name
             let mediaURL = self.shareLink.text!
             
-            UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, mediaURL: mediaURL)
+            UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: newUniqueKey, newFirstName: newFirstName, newLastName: newLastName, newAddress: newAddress, newLat: newLat, newLon: newLon, mediaURL: mediaURL)
             
-            //self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
             
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-            self.present(controller, animated: true, completion: nil)
+            //let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
+            //self.present(controller, animated: true, completion: nil)
         })
     }
     

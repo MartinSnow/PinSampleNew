@@ -93,8 +93,8 @@ class UdacityClient: NSObject {
         return task
     }
     
-    func taskGetStudentLocations(_ completionHandlerForStudentLocations: @escaping (_ success: Bool, _ locationJSON: [[String:AnyObject]]?, _ errorString: String?) -> Void) {
-        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=100")!)
+    func taskGetStudentLocations(_ completionHandlerForStudentLocations: @escaping (_ success: Bool, _ locationJSON: [studentProperty]?, _ errorString: String?) -> Void) {
+        let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation?limit=100&order=-updatedAt")!)
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         let session = URLSession.shared
@@ -109,12 +109,15 @@ class UdacityClient: NSObject {
                 print ("Could not parse the data as JSON: '\(data)'")
                 return
             }
+            
+            print ("parsedResult is \(parsedResult)" )
             guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
                 print ("There is no reslut")
                 return
             }
+            print ("results is \(results)")
             
-            StudentInformation.student.studentInformation = results
+            //studentProperty.studentInformation = results as! [studentProperty]
             /*var n = 1
              StudentInformation.student.studentInformation.append(results[0])
              for studentInformation in results {
@@ -124,20 +127,20 @@ class UdacityClient: NSObject {
              n += 1
              }*/
             
-            completionHandlerForStudentLocations(true, StudentInformation.student.studentInformation, nil)
+            completionHandlerForStudentLocations(true, studentProperty.studentInformation, nil)
             //print("taskGetStudentLocations data: \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
         }
         task.resume()
     }
     
-    func postAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, mediaURL: String) {
+    func postAStudentLocation(newUniqueKey: String, newFirstName: String, newLastName: String, newAddress: String, newLat: String, newLon: String, mediaURL: String) {
         
         let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.httpMethod = "POST"
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"马\", \"lastName\": \"丁\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://\(mediaURL)\",\"latitude\": \(newLat), \"longitude\": \(newLon)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"\(newFirstName)\", \"lastName\": \"\(newLastName)\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://\(mediaURL)\",\"latitude\": \(newLat), \"longitude\": \(newLon)}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…

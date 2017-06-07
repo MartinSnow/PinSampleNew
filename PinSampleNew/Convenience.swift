@@ -74,6 +74,9 @@ extension UdacityClient {
             } else {
                 let userResult = result!
                 if let userData = userResult["user"] as? [String:AnyObject] {
+                    if let name = userData["nickname"] as? String {
+                        StudentInformation.newStudent.name = name
+                    }
                     completionHandlerForUserData(true, userData, nil)
                 } else {
                     print ("Could not find userData")
