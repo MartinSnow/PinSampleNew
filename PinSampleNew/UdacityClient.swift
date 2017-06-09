@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class UdacityClient: NSObject {
     
@@ -102,6 +103,15 @@ class UdacityClient: NSObject {
             if error != nil { // Handle error...
                 return
             }
+            
+            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                if statusCode >= 200 && statusCode <= 299 {
+                    print ("Success")
+                } else {
+                    self.alert(message: "Your request returned a status code other than 2xx!")
+                }
+            }
+            
             let parsedResult: [String:AnyObject]!
             do {
                 parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
@@ -109,26 +119,17 @@ class UdacityClient: NSObject {
                 print ("Could not parse the data as JSON: '\(data)'")
                 return
             }
-            
-            print ("parsedResult is \(parsedResult)" )
+
             guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
                 print ("There is no reslut")
                 return
             }
-            print ("results is \(results)")
             
-            //studentProperty.studentInformation = results as! [studentProperty]
-            /*var n = 1
-             StudentInformation.student.studentInformation.append(results[0])
-             for studentInformation in results {
-             if studentInformation["uniqueKey"] as? String != results[n - 1]["uniqueKey"] as? String {
-             StudentInformation.student.studentInformation.append(results[n])
-             }
-             n += 1
-             }*/
+            for studentInformation in results {
+                studentProperty.studentInformation.append(studentProperty(dictionary: studentInformation))
+            }
             
             completionHandlerForStudentLocations(true, studentProperty.studentInformation, nil)
-            //print("taskGetStudentLocations data: \(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)")
         }
         task.resume()
     }
@@ -144,10 +145,17 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
+                self.alert(message: "Post Failed")
                 return
             }
-            print ("post student location:")
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
+            
+            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                if statusCode >= 200 && statusCode <= 299 {
+                    print ("Success")
+                } else {
+                    self.alert(message: "Your request returned a status code other than 2xx!")
+                }
+            }
             
             let parsedResult: [String:AnyObject]!
             
@@ -170,7 +178,7 @@ class UdacityClient: NSObject {
         
     }
     
-    func putAStudentLocation(newUniqueKey: String, newAddress: String, newLat: String, newLon: String, objectId: String, mediaURL: String) {
+    func putAStudentLocation(newUniqueKey: String, newFirstName: String, newLastName: String, newAddress: String, newLat: String, newLon: String, objectId: String, mediaURL: String) {
         
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(objectId)"
         let url = URL(string: urlString)
@@ -179,14 +187,20 @@ class UdacityClient: NSObject {
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"Ma\", \"lastName\": \"Ding\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://\(mediaURL)\",\"latitude\": \(newLat), \"longitude\": \(newLat)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"\(newFirstName)\", \"lastName\": \"\(newLastName)\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://\(mediaURL)\",\"latitude\": \(newLat), \"longitude\": \(newLat)}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
+                self.alert(message: "Put Failed")
                 return
             }
-            print ("Put A StudentLocation Information.")
-            print(NSString(data: data!, encoding: String.Encoding.utf8.rawValue)!)
+            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                if statusCode >= 200 && statusCode <= 299 {
+                    print ("Success")
+                } else {
+                    self.alert(message: "Your request returned a status code other than 2xx!")
+                }
+            }
         }
         task.resume()
     }
@@ -208,6 +222,13 @@ class UdacityClient: NSObject {
             static var sharedInstance = UdacityClient()
         }
         return Singleton.sharedInstance
+    }
+    
+    private func alert(message: String){
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
+        alert.addAction(cancelAction)
+        alert.show(alert, sender: Any.self)
     }
 
 }

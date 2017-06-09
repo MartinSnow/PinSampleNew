@@ -42,9 +42,9 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
         UdacityClient.sharedInstance().deleteViewController() {(success, errorString) in
             if success {
                 performUIUpdatesOnMain {
-                    self.dismiss(animated: true, completion: nil)
-                    /*let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
-                    self.present(controller, animated: true, completion: nil)*/
+                    //self.dismiss(animated: true, completion: nil)
+                    let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
+                    self.present(controller, animated: true, completion: nil)
                 }
             } else {
                 print (errorString)
@@ -76,7 +76,6 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             for dictionary in locations {
                 
                 if let lat = dictionary.latitude as? Float, let long = dictionary.longitude as? Float, let firstName =  dictionary.firstName as? String, let lastName = dictionary.lastName as? String {
-                    print ("firstName is \(firstName), lastName is \(lastName), lat is \(lat), long is \(long)")
                     
                     // The lat and long are used to create a CLLocationCoordinates2D instance.
                     let coordinate = CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(long))
@@ -97,17 +96,6 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
                     // Finally we place the annotation in an array of annotations.
                     annotations.append(annotation)
                 }
-                
-                // Notice that the float values are being used to create CLLocationDegree values.
-                // This is a version of the Double type.
-                /*guard let lat = dictionary["latitude"] as? Double else {
-                    print ("There is no lat.")
-                    return
-                }
-                guard let long = dictionary["longitude"] as? Double else {
-                    print ("There is no long.")
-                    return
-                }*/
             }
             
             // When the array is complete, we add the annotations to the map.
@@ -115,8 +103,6 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
                 self.mapView.addAnnotations(annotations)
             }
         }
-        //self.taskGetAStudentLocation()
-        
     }
     
     // MARK: - MKMapViewDelegate

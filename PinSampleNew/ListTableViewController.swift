@@ -36,7 +36,7 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     
-    var studentInformation = [studentProperty]()
+    //var studentInformation = [studentProperty]()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
@@ -49,15 +49,14 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        studentInformation = studentProperty.studentInformation
-        return studentInformation.count
+        return studentProperty.studentInformation.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "StudentCell", for: indexPath)
-        let match = self.studentInformation[(indexPath as IndexPath).row]
-        let firstName = match.firstName as! String
-        let lastName = match.lastName as! String
+        let match = studentProperty.studentInformation[(indexPath as IndexPath).row]
+        let firstName = match.firstName
+        let lastName = match.lastName
         cell.textLabel!.text = "\(firstName) \(lastName)"
         return cell
     }
@@ -65,7 +64,7 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let app = UIApplication.shared
-        let studentInformation = self.studentInformation[(indexPath as IndexPath).row]
+        let studentInformation = studentProperty.studentInformation[(indexPath as IndexPath).row]
         if let toOpen = studentInformation.mediaURL as? String {
             app.openURL(URL(string: toOpen)!)
         }

@@ -17,6 +17,16 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
     }
     
     var address = StudentInformation.newStudent.address
+    let localSearchRequest = MKLocalSearchRequest()
+    
+    var newLat = ""
+    var newLon = ""
+    var newAddress = ""
+    var newUniqueKey = ""
+    var newFirstName = ""
+    var newLastName = ""
+    var mediaURL = ""
+    var objectId = ""
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -25,86 +35,65 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         shareLink.delegate = self
+        
+        localSearchRequest.naturalLanguageQuery = address
+        localSearchRequest.region = mapView.region
+        
+        let search = MKLocalSearch(request: localSearchRequest)
+        search.start(completionHandler: {(localSearchResponse, error) in
+            
+            var placeMarks = [MKPlacemark]()
+            if error != nil {
+                self.alert()
+                return
+            } else {
+                for item in localSearchResponse!.mapItems {
+                    placeMarks.append(item.placemark)
+                    print ("item is \(item)")
+                }
+                self.mapView.showAnnotations([placeMarks[0]], animated: false)
+                
+                self.newLat = String(placeMarks[0].coordinate.latitude)
+                self.newLon = String(placeMarks[0].coordinate.longitude)
+                self.newAddress = placeMarks[0].description
+                self.newUniqueKey = StudentInformation.newStudent.uniqueKey
+                self.newFirstName = StudentInformation.newStudent.name
+                self.newLastName = StudentInformation.newStudent.name
+                self.mediaURL = self.shareLink.text!
+                self.objectId = StudentInformation.newStudent.objectId
+            }
+        })
+        
     }
     
     @IBAction func submit(_ sender: AnyObject) {
         
         if StudentInformation.newStudent.objectId == "" {
-            self.searchLocationAndPost(address: address)
+            self.searchLocationAndPost(localSearchRequest:localSearchRequest)
+            print("use post")
         } else {
-            self.searchLocationAndPut(address: address)
+            self.searchLocationAndPut(localSearchRequest:localSearchRequest)
+            print("use put")
         }
     }
-    
-    func searchLocationAndPost(address:String) {
+    @IBAction func cancel(_ sender: AnyObject) {
         
-        let localSearchRequest = MKLocalSearchRequest()
-        localSearchRequest.naturalLanguageQuery = address
-        localSearchRequest.region = mapView.region
+        dismiss(animated: true, completion: nil)
         
-        let search = MKLocalSearch(request: localSearchRequest)
-        search.start(completionHandler: {(localSearchResponse, error) in
-            
-            var placeMarks = [MKPlacemark]()
-            if error != nil {
-                self.alert()
-                return
-            }
-            for item in localSearchResponse!.mapItems {
-                placeMarks.append(item.placemark)
-                print ("item is \(item)")
-            }
-            self.mapView.showAnnotations([placeMarks[0]], animated: false)
-            
-            let newLat = String(placeMarks[0].coordinate.latitude)
-            let newLon = String(placeMarks[0].coordinate.longitude)
-            let newAddress = placeMarks[0].description
-            let newUniqueKey = StudentInformation.newStudent.uniqueKey
-            let newFirstName = StudentInformation.newStudent.name
-            let newLastName = StudentInformation.newStudent.name
-            let mediaURL = self.shareLink.text!
-            
-            UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: newUniqueKey, newFirstName: newFirstName, newLastName: newLastName, newAddress: newAddress, newLat: newLat, newLon: newLon, mediaURL: mediaURL)
-            
-            self.dismiss(animated: true, completion: nil)
-            
-            //let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-            //self.present(controller, animated: true, completion: nil)
-        })
     }
     
-    func searchLocationAndPut(address:String) {
+    func searchLocationAndPost(localSearchRequest:MKLocalSearchRequest) {
+        UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: newUniqueKey, newFirstName: newFirstName, newLastName: newLastName, newAddress: newAddress, newLat: newLat, newLon: newLon, mediaURL: mediaURL)
         
-        let localSearchRequest = MKLocalSearchRequest()
-        localSearchRequest.naturalLanguageQuery = address
-        localSearchRequest.region = mapView.region
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
+        self.present(controller, animated: true, completion: nil)
+    }
+    
+    func searchLocationAndPut(localSearchRequest:MKLocalSearchRequest) {
+        UdacityClient.sharedInstance().putAStudentLocation(newUniqueKey: newUniqueKey, newFirstName: newFirstName, newLastName: newLastName, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId, mediaURL: mediaURL)
         
-        let search = MKLocalSearch(request: localSearchRequest)
-        search.start(completionHandler: {(localSearchResponse, error) in
-            
-            var placeMarks = [MKPlacemark]()
-            if error != nil {
-                self.alert()
-                return
-            }
-            for item in localSearchResponse!.mapItems {
-                placeMarks.append(item.placemark)
-                print ("item is \(item)")
-            }
-            self.mapView.showAnnotations([placeMarks[0]], animated: false)
-            
-            let newLat = String(placeMarks[0].coordinate.latitude)
-            let newLon = String(placeMarks[0].coordinate.longitude)
-            let newAddress = placeMarks[0].description
-            let newUniqueKey = StudentInformation.newStudent.uniqueKey
-            let mediaURL = self.shareLink.text!
-            let objectId = StudentInformation.newStudent.objectId
-            
-            UdacityClient.sharedInstance().putAStudentLocation(newUniqueKey: newUniqueKey, newAddress: newAddress, newLat: newLat, newLon: newLon, objectId: objectId, mediaURL: mediaURL)
-            
-            let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-            self.present(controller, animated: true, completion: nil)
-        })
+        let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
+        self.present(controller, animated: true, completion: nil)
     }
     
     private func alert(){

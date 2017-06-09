@@ -25,20 +25,19 @@ struct studentProperty {
     var updateAt: String
     
     init(dictionary: [String: AnyObject]) {
-        createdAt = dictionary["createdAt"] as! String
-        objectId = dictionary["objectId"] as! String
-        latitude = dictionary["latitude"] as! Float
-        longitude = dictionary["longitude"] as! Float
-        mediaURL = dictionary["mediaURL"] as! String
-        firstName = dictionary["firstName"] as! String
-        lastName = dictionary["lastName"] as! String
-        mapString = dictionary["mapString"] as! String
-        uniqueKey = dictionary["uniqueKey"] as! String
-        updateAt = dictionary["updateAt"] as! String
+        createdAt = dictionary["createdAt"] as? String ?? ""
+        objectId = dictionary["objectId"] as? String ?? ""
+        latitude = dictionary["latitude"] as? Float ?? 0.0
+        longitude = dictionary["longitude"] as? Float ?? 0.0
+        mediaURL = dictionary["mediaURL"] as? String ?? ""
+        firstName = dictionary["firstName"] as? String ?? ""
+        lastName = dictionary["lastName"] as? String ?? ""
+        mapString = dictionary["mapString"] as? String ?? ""
+        uniqueKey = dictionary["uniqueKey"] as? String ?? ""
+        updateAt = dictionary["updateAt"] as? String ?? ""
     }
     
     static var studentInformation = [studentProperty]()
-    static var studentInformation2 = [[studentProperty]]()
 
 }
 
