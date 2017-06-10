@@ -59,10 +59,14 @@ struct StudentInformation {
     }
     
     struct newStudent {
-        static var address = ""
-        static var uniqueKey = ""
         static var objectId = ""
-        static var name = ""
+        static var newLat = ""
+        static var newLon = ""
+        static var newAddress = ""
+        static var newUniqueKey = ""
+        static var newFirstName = ""
+        static var newLastName = ""
+        static var mediaURL = ""
     }
 }
 

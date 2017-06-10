@@ -394,7 +394,6 @@ today?</string>
                                                 <state key="normal" title="Find on the Map"/>
                                                 <connections>
                                                     <action selector="findOnTheMap:" destination="ZG4-UJ-1Rg" eventType="touchUpInside" id="cMe-Np-G0F"/>
-                                                    <segue destination="A2O-aV-gDU" kind="show" id="6Yj-JX-uHw"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lcg-78-4FL">
@@ -409,14 +408,19 @@ today?</string>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="396" id="Tfb-jb-xoI"/>
                                 </constraints>
                             </stackView>
+                            <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="BXs-OC-zSc"/>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="uyk-2p-uBg" firstAttribute="leading" secondItem="RiR-2m-Pym" secondAttribute="leading" id="3GZ-pq-HaO"/>
                             <constraint firstItem="AqN-sh-vyz" firstAttribute="centerX" secondItem="RiR-2m-Pym" secondAttribute="centerX" id="PP8-mJ-V2Y"/>
+                            <constraint firstItem="BXs-OC-zSc" firstAttribute="top" secondItem="uyk-2p-uBg" secondAttribute="bottom" id="Pz9-Nl-YCB"/>
                             <constraint firstAttribute="trailing" secondItem="uyk-2p-uBg" secondAttribute="trailing" id="Qjb-77-VLN"/>
                             <constraint firstItem="AqN-sh-vyz" firstAttribute="top" secondItem="uyk-2p-uBg" secondAttribute="bottom" id="SiT-Fd-HE1"/>
                             <constraint firstItem="uyk-2p-uBg" firstAttribute="top" secondItem="RiR-2m-Pym" secondAttribute="top" id="WGA-c6-N90"/>
+                            <constraint firstItem="MNF-Wl-kie" firstAttribute="top" secondItem="BXs-OC-zSc" secondAttribute="bottom" id="ZA8-7j-w60"/>
+                            <constraint firstItem="BXs-OC-zSc" firstAttribute="leading" secondItem="RiR-2m-Pym" secondAttribute="leading" id="g9Z-ly-b82"/>
+                            <constraint firstAttribute="trailing" secondItem="BXs-OC-zSc" secondAttribute="trailing" id="pVr-Ir-763"/>
                             <constraint firstItem="AqN-sh-vyz" firstAttribute="leading" secondItem="RiR-2m-Pym" secondAttribute="leading" id="pZ3-JP-9wp"/>
                             <constraint firstItem="AqN-sh-vyz" firstAttribute="top" secondItem="uyk-2p-uBg" secondAttribute="bottom" id="rpO-DL-Df2"/>
                             <constraint firstAttribute="trailing" secondItem="AqN-sh-vyz" secondAttribute="trailing" id="smP-tn-ai6"/>
@@ -426,11 +430,12 @@ today?</string>
                     <navigationItem key="navigationItem" id="uog-oo-KZF"/>
                     <connections>
                         <outlet property="LocationText" destination="Enj-lb-eg7" id="KF0-1b-g19"/>
+                        <outlet property="mapView" destination="BXs-OC-zSc" id="PhL-Fd-Gnj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M0G-tj-x9B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2390" y="-412"/>
+            <point key="canvasLocation" x="2389.5999999999999" y="-412.44377811094455"/>
         </scene>
     </scenes>
     <resources>

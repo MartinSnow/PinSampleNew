@@ -35,8 +35,6 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    
-    //var studentInformation = [studentProperty]()
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     

@@ -50,7 +50,7 @@ extension UdacityClient {
                 if let account = result?["account"] as? [String:AnyObject] {
                     if let userId = account["key"] as? String {
                         print ("uniqueKey is \(userId)")
-                        StudentInformation.newStudent.uniqueKey = userId
+                        StudentInformation.newStudent.newUniqueKey = userId
                         completionHandlerForUserID(true, userId, nil)
                     } else {
                         print ("Could not find userId.")
@@ -75,7 +75,8 @@ extension UdacityClient {
                 let userResult = result!
                 if let userData = userResult["user"] as? [String:AnyObject] {
                     if let name = userData["nickname"] as? String {
-                        StudentInformation.newStudent.name = name
+                        StudentInformation.newStudent.newFirstName = name
+                        StudentInformation.newStudent.newLastName = name
                     }
                     completionHandlerForUserData(true, userData, nil)
                 } else {

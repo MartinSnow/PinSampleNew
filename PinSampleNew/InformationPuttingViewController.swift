@@ -11,11 +11,12 @@ import MapKit
 
 class InformationPuttingViewController: UIViewController, UIApplicationDelegate, UINavigationControllerDelegate,UITextFieldDelegate, MKMapViewDelegate {
 
-    var mapView: MKMapView!
     var keyboardOnScreen = false
-    
+    static var placeMarks = [MKPlacemark]()
+    let localSearchRequest = MKLocalSearchRequest()
     
     @IBOutlet weak var LocationText: UITextField!
+    @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +32,29 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
     
     @IBAction func findOnTheMap(_ sender: AnyObject) {
         
-        StudentInformation.newStudent.address = LocationText.text!
+        localSearchRequest.naturalLanguageQuery = LocationText.text!
+        localSearchRequest.region = mapView.region
+        
+        let search = MKLocalSearch(request: localSearchRequest)
+        search.start(completionHandler: {(localSearchResponse, error) in
+            
+            
+            if error != nil {
+                self.alert()
+                return
+            } else {
+                for item in localSearchResponse!.mapItems {
+                    InformationPuttingViewController.placeMarks.append(item.placemark)
+                }
+                
+                StudentInformation.newStudent.newLat = String(InformationPuttingViewController.placeMarks[0].coordinate.latitude)
+                StudentInformation.newStudent.newLon = String(InformationPuttingViewController.placeMarks[0].coordinate.longitude)
+                StudentInformation.newStudent.newAddress = InformationPuttingViewController.placeMarks[0].description
+                
+                let controller = self.storyboard!.instantiateViewController(withIdentifier: "SearchMapViewController")
+                self.present(controller, animated: true, completion: nil)
+            }
+        })
         
     }
     
@@ -74,5 +97,12 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
     
     func subscribeToNotification(_ notification: NSNotification.Name, selector: Selector) {
         NotificationCenter.default.addObserver(self, selector: selector, name: notification, object: nil)
+    }
+    
+    private func alert(){
+        let alert = UIAlertController(title: nil, message: "Place not found", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
+        alert.addAction(cancelAction)
+        alert.show(alert, sender: Any.self)
     }
 }
