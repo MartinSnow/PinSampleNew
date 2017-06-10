@@ -65,6 +65,8 @@ class LoginViewController: UIViewController {
                     performUIUpdatesOnMain {
                         self.setUIEnabled(true)
                         self.loginAlert(message: errorString!)
+                        self.Username.text = nil
+                        self.Password.text = nil
                     }
                 }
             }
@@ -137,20 +139,6 @@ extension LoginViewController: UITextFieldDelegate {
 
 private extension LoginViewController {
     
-    func loginAlert(message: String) {
-        let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel){(action) in
-            self.Username.text = nil
-            self.Password.text = nil
-            self.dismiss(animated: true, completion: nil)
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil)
-        alertController.addAction(cancelAction)
-        alertController.addAction(okAction)
-        
-        self.present(alertController, animated: true, completion: nil)
-    }
-    
     func setUIEnabled(_ enabled: Bool) {
         Username.isEnabled = enabled
         Password.isEnabled = enabled
@@ -189,6 +177,18 @@ private extension LoginViewController {
         textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [NSForegroundColorAttributeName: UIColor.white])
         textField.tintColor = StudentInformation.UI.BlueColor
         textField.delegate = self
+    }
+    
+    func loginAlert(message: String) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel){(action) in
+            self.dismiss(animated: true, completion: nil)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.default, handler: nil)
+        alertController.addAction(cancelAction)
+        alertController.addAction(okAction)
+        
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 

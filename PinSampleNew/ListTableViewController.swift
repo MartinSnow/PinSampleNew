@@ -17,8 +17,6 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
             if success {
                 performUIUpdatesOnMain {
                     self.dismiss(animated: true, completion: nil)
-                    /*let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
-                     self.present(controller, animated: true, completion: nil)*/
                 }
             } else {
                 print (errorString)
@@ -64,6 +62,7 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let app = UIApplication.shared
         let studentInformation = studentProperty.studentInformation[(indexPath as IndexPath).row]
         if let toOpen = studentInformation.mediaURL as? String {
+            print ("toOpen is \(toOpen)")
             app.openURL(URL(string: toOpen)!)
         }
     }
@@ -80,5 +79,4 @@ class ListTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.present(alertController, animated: true, completion: nil)
     }
-
 }

@@ -111,14 +111,16 @@ class UdacityClient: NSObject {
             do {
                 parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
             } catch {
-                print ("Could not parse the data as JSON: '\(data)'")
+                completionHandlerForStudentLocations(false, nil, "Could not parse the data as JSON: \(data)")
                 return
             }
 
             guard let results = parsedResult["results"] as? [[String:AnyObject]] else {
-                print ("There is no reslut")
+                completionHandlerForStudentLocations(false, nil, "There is no reslut.")
                 return
             }
+            
+            studentProperty.studentInformation = [studentProperty]()
             
             for studentInformation in results {
                 studentProperty.studentInformation.append(studentProperty(dictionary: studentInformation))
@@ -129,7 +131,7 @@ class UdacityClient: NSObject {
         task.resume()
     }
     
-    func postAStudentLocation(newUniqueKey: String, newFirstName: String, newLastName: String, newAddress: String, newLat: String, newLon: String, mediaURL: String) {
+    func postAStudentLocation(newUniqueKey: String, newFirstName: String, newLastName: String, newAddress: String, newLat: String, newLon: String, mediaURL: String, _ completionHandlerForPostAStudentLocation: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
         
         let request = NSMutableURLRequest(url: URL(string: "https://parse.udacity.com/parse/classes/StudentLocation")!)
         request.httpMethod = "POST"
@@ -140,21 +142,23 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                self.alert(message: "Post Failed")
+                print ("Post failed.")
+                completionHandlerForPostAStudentLocation(false, "Post failed.")
                 return
             }
-            
             let parsedResult: [String:AnyObject]!
             
             do {
                 parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
             } catch {
-                print ("Could not parse the data as JSON: '\(data)'")
+                print ("Could not parse the data as JSON: \(data).")
+                completionHandlerForPostAStudentLocation(false, "Could not parse the data as JSON: \(data).")
                 return
             }
             
             guard let objectId = parsedResult["objectId"] as? String else {
-                print ("There is no objectId")
+                print ("There is no objectId.")
+                completionHandlerForPostAStudentLocation(false, "There is no objectId.")
                 return
             }
             
@@ -165,7 +169,7 @@ class UdacityClient: NSObject {
         
     }
     
-    func putAStudentLocation(newUniqueKey: String, newFirstName: String, newLastName: String, newAddress: String, newLat: String, newLon: String, objectId: String, mediaURL: String) {
+    func putAStudentLocation(newUniqueKey: String, newFirstName: String, newLastName: String, newAddress: String, newLat: String, newLon: String, objectId: String, mediaURL: String, _ completionHandlerForPutAStudentLocation: @escaping (_ success: Bool, _ errorString: String?) -> Void) {
         
         let urlString = "https://parse.udacity.com/parse/classes/StudentLocation/\(objectId)"
         let url = URL(string: urlString)
@@ -178,7 +182,7 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                self.alert(message: "Put Failed")
+                completionHandlerForPutAStudentLocation(false, "Put failed.")
                 return
             }
         }
@@ -202,13 +206,6 @@ class UdacityClient: NSObject {
             static var sharedInstance = UdacityClient()
         }
         return Singleton.sharedInstance
-    }
-    
-    private func alert(message: String){
-        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
-        alert.addAction(cancelAction)
-        alert.show(alert, sender: Any.self)
     }
 
 }

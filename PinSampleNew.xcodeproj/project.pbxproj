@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D815C3AB1EC60CCC00F3DE31 /* InformationPuttingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815C3AA1EC60CCC00F3DE31 /* InformationPuttingViewController.swift */; };
+		D85E404D1EEC418E001C87C4 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85E404C1EEC418E001C87C4 /* Alert.swift */; };
 		D8758EDD1EB0D4BC00556BB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8758EDB1EB0D4BC00556BB0 /* Main.storyboard */; };
 		D8758EDF1EB0D4BC00556BB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D8758EDE1EB0D4BC00556BB0 /* Assets.xcassets */; };
 		D8758EE21EB0D4BC00556BB0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8758EE01EB0D4BC00556BB0 /* LaunchScreen.storyboard */; };
@@ -43,6 +44,7 @@
 
 /* Begin PBXFileReference section */
 		D815C3AA1EC60CCC00F3DE31 /* InformationPuttingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InformationPuttingViewController.swift; sourceTree = "<group>"; };
+		D85E404C1EEC418E001C87C4 /* Alert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		D8758ED41EB0D4BC00556BB0 /* PinSampleNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PinSampleNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8758EDC1EB0D4BC00556BB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D8758EDE1EB0D4BC00556BB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				D8758F081EBC614B00556BB0 /* AppDelegate.swift */,
+				D85E404C1EEC418E001C87C4 /* Alert.swift */,
 				D8758F0A1EBC614B00556BB0 /* GCDBlackBox.swift */,
 				D8758F1D1EBC618E00556BB0 /* Model */,
 				D8758F1C1EBC616800556BB0 /* Controller */,
@@ -329,6 +332,7 @@
 				D8758F141EBC614B00556BB0 /* GCDBlackBox.swift in Sources */,
 				D8758F1A1EBC614B00556BB0 /* StudentInformation.swift in Sources */,
 				D8758F161EBC614B00556BB0 /* ListTableViewController.swift in Sources */,
+				D85E404D1EEC418E001C87C4 /* Alert.swift in Sources */,
 				D8758F131EBC614B00556BB0 /* Convenience.swift in Sources */,
 				D815C3AB1EC60CCC00F3DE31 /* InformationPuttingViewController.swift in Sources */,
 			);

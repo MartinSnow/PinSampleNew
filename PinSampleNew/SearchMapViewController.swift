@@ -20,14 +20,19 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
         self.mapView.showAnnotations([InformationPuttingViewController.placeMarks[0]], animated: false)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+    }
+    
     //submit Internet address
     @IBAction func submit(_ sender: AnyObject) {
-        
         StudentInformation.newStudent.mediaURL = self.shareLink.text!
         if StudentInformation.newStudent.objectId == "" {
             self.searchLocationAndPost()
+            print ("post")
         } else {
             self.searchLocationAndPut()
+            print("put")
         }
     }
     @IBAction func cancel(_ sender: AnyObject) {
@@ -37,14 +42,26 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
     }
     
     func searchLocationAndPost() {
-        UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, mediaURL: StudentInformation.newStudent.mediaURL)
+        UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, mediaURL: StudentInformation.newStudent.mediaURL){(success, errorString) in
+            
+            if success == false {
+                print ("post failed.")
+                self.alert(message: errorString!)
+            }
+        }
 
         //return to MapsTabBarController
         self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     func searchLocationAndPut() {
-        UdacityClient.sharedInstance().putAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, objectId: StudentInformation.newStudent.objectId, mediaURL: StudentInformation.newStudent.mediaURL)
+        UdacityClient.sharedInstance().putAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, objectId: StudentInformation.newStudent.objectId, mediaURL: StudentInformation.newStudent.mediaURL){(success, errorString) in
+            
+            if success == false {
+                print ("put failed.")
+                self.alert(message: errorString!)
+            }
+        }
         
         //return to MapsTabBarController
         self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -53,5 +70,12 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func alert(message: String){
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
     }
 }

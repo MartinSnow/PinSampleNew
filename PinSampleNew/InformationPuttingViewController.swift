@@ -50,7 +50,7 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
             
             
             if error != nil {
-                self.alert()
+                self.alert(message: "Place not found")
                 
                 //stop indicator
                 self.indicator.stopAnimating()
@@ -116,8 +116,8 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
         NotificationCenter.default.addObserver(self, selector: selector, name: notification, object: nil)
     }
     
-    private func alert(){
-        let alert = UIAlertController(title: nil, message: "Place not found", preferredStyle: UIAlertControllerStyle.alert)
+    func alert(message: String){
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)

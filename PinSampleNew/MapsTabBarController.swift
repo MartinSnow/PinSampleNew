@@ -29,12 +29,11 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
     
     @IBAction func postPin(_ sender: AnyObject) {
         if StudentInformation.newStudent.objectId == "" {
-          let controller = self.storyboard!.instantiateViewController(withIdentifier: "InformationPuttingViewController")
-          self.present(controller, animated: true, completion: nil)
+            let controller = self.storyboard!.instantiateViewController(withIdentifier: "InformationPuttingViewController")
+            self.present(controller, animated: true, completion: nil)
         } else {
-          self.postPinAlert()
+            self.postPinAlert()
         }
-        
     }
     
     @IBAction func logout(_ sender: AnyObject) {
@@ -57,10 +56,13 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         UdacityClient.sharedInstance().taskGetStudentLocations(){(success, locationJSON, errorString) in
             
             if success == false {
-                self.alert()
+                self.alert(message: errorString!)
             }
             
             // The "locations" array is an array of dictionary objects that are similar to the JSON data that you can download from parse.
@@ -109,9 +111,6 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
     
     // MARK: - MKMapViewDelegate
 
-    // Here we create a view with a "right callout accessory view". You might choose to look into other
-    // decoration alternatives. Notice the similarity between this method and the cellForRowAtIndexPath
-    // method in TableViewDataSource.
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
@@ -138,12 +137,12 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
         if control == view.rightCalloutAccessoryView {
             let app = UIApplication.shared
             if let toOpen = view.annotation?.subtitle! {
+                print ("toOpen is \(toOpen)")
                 app.openURL(URL(string: toOpen)!)
             }
         }
     }
     
-    //Setting alert
     func postPinAlert() {
         let alertController = UIAlertController(title: nil, message: "You Have Already Posted a Student Location. Would You Like to Overwrite Your Current Location?", preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel){(action) in
@@ -157,8 +156,8 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    private func alert(){
-        let alert = UIAlertController(title: nil, message: "Fail to Download", preferredStyle: UIAlertControllerStyle.alert)
+    func alert(message: String){
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
