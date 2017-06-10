@@ -14,6 +14,7 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
     var keyboardOnScreen = false
     static var placeMarks = [MKPlacemark]()
     let localSearchRequest = MKLocalSearchRequest()
+    let indicator = UIActivityIndicatorView()
     
     @IBOutlet weak var LocationText: UITextField!
     @IBOutlet weak var mapView: MKMapView!
@@ -28,6 +29,12 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
         subscribeToNotification(.UIKeyboardDidShow, selector: #selector(keyboardDidShow))
         subscribeToNotification(.UIKeyboardDidHide, selector: #selector(keyboardDidHide))
         
+        //add an activity indicator
+        view.addSubview(indicator)
+        indicator.center = view.center
+        indicator.hidesWhenStopped = true
+        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        
     }
     
     @IBAction func findOnTheMap(_ sender: AnyObject) {
@@ -35,12 +42,19 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
         localSearchRequest.naturalLanguageQuery = LocationText.text!
         localSearchRequest.region = mapView.region
         
+        //start indicator
+        indicator.startAnimating()
+        
         let search = MKLocalSearch(request: localSearchRequest)
         search.start(completionHandler: {(localSearchResponse, error) in
             
             
             if error != nil {
                 self.alert()
+                
+                //stop indicator
+                self.indicator.stopAnimating()
+                
                 return
             } else {
                 for item in localSearchResponse!.mapItems {
@@ -50,6 +64,9 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
                 StudentInformation.newStudent.newLat = String(InformationPuttingViewController.placeMarks[0].coordinate.latitude)
                 StudentInformation.newStudent.newLon = String(InformationPuttingViewController.placeMarks[0].coordinate.longitude)
                 StudentInformation.newStudent.newAddress = InformationPuttingViewController.placeMarks[0].description
+                
+                //stop indicator
+                self.indicator.stopAnimating()
                 
                 let controller = self.storyboard!.instantiateViewController(withIdentifier: "SearchMapViewController")
                 self.present(controller, animated: true, completion: nil)
@@ -103,6 +120,6 @@ class InformationPuttingViewController: UIViewController, UIApplicationDelegate,
         let alert = UIAlertController(title: nil, message: "Place not found", preferredStyle: UIAlertControllerStyle.alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
         alert.addAction(cancelAction)
-        alert.show(alert, sender: Any.self)
+        present(alert, animated: true, completion: nil)
     }
 }

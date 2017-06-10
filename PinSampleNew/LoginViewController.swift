@@ -64,7 +64,7 @@ class LoginViewController: UIViewController {
                 } else {
                     performUIUpdatesOnMain {
                         self.setUIEnabled(true)
-                        self.loginAlert()
+                        self.loginAlert(message: errorString!)
                     }
                 }
             }
@@ -137,8 +137,8 @@ extension LoginViewController: UITextFieldDelegate {
 
 private extension LoginViewController {
     
-    func loginAlert() {
-        let alertController = UIAlertController(title: nil, message: "Fail to Login.", preferredStyle: UIAlertControllerStyle.alert)
+    func loginAlert(message: String) {
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel){(action) in
             self.Username.text = nil
             self.Password.text = nil

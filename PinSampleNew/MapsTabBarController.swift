@@ -42,9 +42,7 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
         UdacityClient.sharedInstance().deleteViewController() {(success, errorString) in
             if success {
                 performUIUpdatesOnMain {
-                    //self.dismiss(animated: true, completion: nil)
-                    let controller = self.storyboard!.instantiateViewController(withIdentifier: "LoginViewController")
-                    self.present(controller, animated: true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }
             } else {
                 print (errorString)
@@ -60,6 +58,10 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         UdacityClient.sharedInstance().taskGetStudentLocations(){(success, locationJSON, errorString) in
+            
+            if success == false {
+                self.alert()
+            }
             
             // The "locations" array is an array of dictionary objects that are similar to the JSON data that you can download from parse.
             let locations = studentProperty.studentInformation
@@ -140,15 +142,8 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
             }
         }
     }
- 
-
-    // MARK: - Sample Data
     
-    // Some sample data. This is a dictionary that is more or less similar to the
-    // JSON data that you will download from Parse.
-    
-    
-    
+    //Setting alert
     func postPinAlert() {
         let alertController = UIAlertController(title: nil, message: "You Have Already Posted a Student Location. Would You Like to Overwrite Your Current Location?", preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "Overwrite", style: UIAlertActionStyle.cancel){(action) in
@@ -160,5 +155,12 @@ class mapsTabBarController: UIViewController, MKMapViewDelegate {
         alertController.addAction(okAction)
         
         self.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func alert(){
+        let alert = UIAlertController(title: nil, message: "Fail to Download", preferredStyle: UIAlertControllerStyle.alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive, handler: nil)
+        alert.addAction(cancelAction)
+        present(alert, animated: true, completion: nil)
     }
 }

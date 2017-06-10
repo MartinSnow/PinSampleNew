@@ -17,12 +17,13 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         shareLink.delegate = self
-        StudentInformation.newStudent.mediaURL = self.shareLink.text!
         self.mapView.showAnnotations([InformationPuttingViewController.placeMarks[0]], animated: false)
     }
     
+    //submit Internet address
     @IBAction func submit(_ sender: AnyObject) {
         
+        StudentInformation.newStudent.mediaURL = self.shareLink.text!
         if StudentInformation.newStudent.objectId == "" {
             self.searchLocationAndPost()
         } else {
@@ -37,16 +38,16 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
     
     func searchLocationAndPost() {
         UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, mediaURL: StudentInformation.newStudent.mediaURL)
-        
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-        self.present(controller, animated: true, completion: nil)
+
+        //return to MapsTabBarController
+        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     func searchLocationAndPut() {
         UdacityClient.sharedInstance().putAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, objectId: StudentInformation.newStudent.objectId, mediaURL: StudentInformation.newStudent.mediaURL)
         
-        let controller = self.storyboard!.instantiateViewController(withIdentifier: "TabBarController")
-        self.present(controller, animated: true, completion: nil)
+        //return to MapsTabBarController
+        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

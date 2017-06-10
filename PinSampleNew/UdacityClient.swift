@@ -38,8 +38,10 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
+                completionHandlerForPostWithUdAPI(nil,error! as NSError)
                 return
             }
+            
             let range = Range(uncheckedBounds: (5, data!.count))
             let newData = data?.subdata(in: range) /* subset response data! */
             //print(NSString(data: newData!, encoding: String.Encoding.utf8.rawValue)!)
@@ -101,15 +103,8 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error...
+                completionHandlerForStudentLocations(false, nil, "Fail to get studentLocations.")
                 return
-            }
-            
-            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if statusCode >= 200 && statusCode <= 299 {
-                    print ("Success")
-                } else {
-                    self.alert(message: "Your request returned a status code other than 2xx!")
-                }
             }
             
             let parsedResult: [String:AnyObject]!
@@ -149,14 +144,6 @@ class UdacityClient: NSObject {
                 return
             }
             
-            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if statusCode >= 200 && statusCode <= 299 {
-                    print ("Success")
-                } else {
-                    self.alert(message: "Your request returned a status code other than 2xx!")
-                }
-            }
-            
             let parsedResult: [String:AnyObject]!
             
             do {
@@ -193,13 +180,6 @@ class UdacityClient: NSObject {
             if error != nil { // Handle error…
                 self.alert(message: "Put Failed")
                 return
-            }
-            if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if statusCode >= 200 && statusCode <= 299 {
-                    print ("Success")
-                } else {
-                    self.alert(message: "Your request returned a status code other than 2xx!")
-                }
             }
         }
         task.resume()

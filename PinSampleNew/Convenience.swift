@@ -54,11 +54,10 @@ extension UdacityClient {
                         completionHandlerForUserID(true, userId, nil)
                     } else {
                         print ("Could not find userId.")
-                        completionHandlerForUserID(false, nil, "Login Failed (User ID).")
+                        completionHandlerForUserID(false, nil, "The credentials were incorrect, please try again")
                     }
                 } else {
-                    print("Could not find account.")
-                    completionHandlerForUserID(false, nil, "Login Failed (User ID).")
+                    completionHandlerForUserID(false, nil, "The credentials were incorrect, please try again")
                 }
             }
         }
@@ -74,9 +73,9 @@ extension UdacityClient {
             } else {
                 let userResult = result!
                 if let userData = userResult["user"] as? [String:AnyObject] {
-                    if let name = userData["nickname"] as? String {
-                        StudentInformation.newStudent.newFirstName = name
-                        StudentInformation.newStudent.newLastName = name
+                    if let lastName = userData["last_name"] as? String, let firstName = userData["first_name"] as? String {
+                        StudentInformation.newStudent.newFirstName = firstName
+                        StudentInformation.newStudent.newLastName = lastName
                     }
                     completionHandlerForUserData(true, userData, nil)
                 } else {
