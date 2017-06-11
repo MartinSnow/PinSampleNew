@@ -20,10 +20,6 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
         self.mapView.showAnnotations([InformationPuttingViewController.placeMarks[0]], animated: false)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-    }
-    
     //submit Internet address
     @IBAction func submit(_ sender: AnyObject) {
         StudentInformation.newStudent.mediaURL = self.shareLink.text!
@@ -45,26 +41,27 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
         UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, mediaURL: StudentInformation.newStudent.mediaURL){(success, errorString) in
             
             if success == false {
-                print ("post failed.")
+                print ("post failed 2.")
                 self.alert(message: errorString!)
+            } else {
+                //return to MapsTabBarController
+                self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
             }
         }
-
-        //return to MapsTabBarController
-        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     func searchLocationAndPut() {
         UdacityClient.sharedInstance().putAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, objectId: StudentInformation.newStudent.objectId, mediaURL: StudentInformation.newStudent.mediaURL){(success, errorString) in
             
             if success == false {
-                print ("put failed.")
+                print ("put failed 2.")
                 self.alert(message: errorString!)
+            } else {
+                print ("put success.")
+                //return to MapsTabBarController
+                self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
             }
         }
-        
-        //return to MapsTabBarController
-        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

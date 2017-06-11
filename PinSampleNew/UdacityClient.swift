@@ -142,8 +142,8 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                print ("Post failed.")
-                completionHandlerForPostAStudentLocation(false, "Post failed.")
+                print ("post failed 1.")
+                completionHandlerForPostAStudentLocation(false, "post failed 1.")
                 return
             }
             let parsedResult: [String:AnyObject]!
@@ -182,7 +182,8 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                completionHandlerForPutAStudentLocation(false, "Put failed.")
+                print ("put failed 1")
+                completionHandlerForPutAStudentLocation(false, "put failed 1.")
                 return
             }
         }
