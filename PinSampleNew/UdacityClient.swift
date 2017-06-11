@@ -142,7 +142,6 @@ class UdacityClient: NSObject {
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                print ("post failed 1.")
                 completionHandlerForPostAStudentLocation(false, "post failed 1.")
                 return
             }
@@ -151,18 +150,17 @@ class UdacityClient: NSObject {
             do {
                 parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
             } catch {
-                print ("Could not parse the data as JSON: \(data).")
                 completionHandlerForPostAStudentLocation(false, "Could not parse the data as JSON: \(data).")
                 return
             }
             
             guard let objectId = parsedResult["objectId"] as? String else {
-                print ("There is no objectId.")
                 completionHandlerForPostAStudentLocation(false, "There is no objectId.")
                 return
             }
             
             StudentInformation.newStudent.objectId = objectId
+            completionHandlerForPostAStudentLocation(true, nil)
             
         }
         task.resume()
@@ -178,14 +176,29 @@ class UdacityClient: NSObject {
         request.addValue("QrX47CA9cyuGewLdsL7o5Eb8iug6Em8ye0dnAbIr", forHTTPHeaderField: "X-Parse-Application-Id")
         request.addValue("QuWThTdiRmTux3YaDseUSEpUKo7aBYM737yKd4gY", forHTTPHeaderField: "X-Parse-REST-API-Key")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"\(newFirstName)\", \"lastName\": \"\(newLastName)\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://\(mediaURL)\",\"latitude\": \(newLat), \"longitude\": \(newLat)}".data(using: String.Encoding.utf8)
+        request.httpBody = "{\"uniqueKey\": \"\(newUniqueKey)\", \"firstName\": \"\(newFirstName)\", \"lastName\": \"\(newLastName)\",\"mapString\": \"\(newAddress)\", \"mediaURL\": \"https://\(mediaURL)\",\"latitude\": \(newLat), \"longitude\": \(newLon)}".data(using: String.Encoding.utf8)
         let session = URLSession.shared
         let task = session.dataTask(with: request as URLRequest) { data, response, error in
             if error != nil { // Handle error…
-                print ("put failed 1")
                 completionHandlerForPutAStudentLocation(false, "put failed 1.")
                 return
             }
+            let parsedResult: [String:AnyObject]!
+            
+            do {
+                parsedResult = try JSONSerialization.jsonObject(with: data!, options: .allowFragments) as! [String:AnyObject]
+            } catch {
+                completionHandlerForPutAStudentLocation(false, "Could not parse the data as JSON: \(data).")
+                return
+            }
+            
+            guard let updateAt = parsedResult["updatedAt"] as? String else {
+                completionHandlerForPutAStudentLocation(false, "There is no updatedAt.")
+                return
+            }
+            
+            StudentInformation.newStudent.updateAt = updateAt
+            completionHandlerForPutAStudentLocation(true, nil)
         }
         task.resume()
     }

@@ -67,6 +67,7 @@ struct StudentInformation {
         static var newFirstName = ""
         static var newLastName = ""
         static var mediaURL = ""
+        static var updateAt = ""
     }
 }
 

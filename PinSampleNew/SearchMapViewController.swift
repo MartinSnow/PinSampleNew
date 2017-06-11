@@ -41,7 +41,6 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
         UdacityClient.sharedInstance().postAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, mediaURL: StudentInformation.newStudent.mediaURL){(success, errorString) in
             
             if success == false {
-                print ("post failed 2.")
                 self.alert(message: errorString!)
             } else {
                 //return to MapsTabBarController
@@ -54,10 +53,8 @@ class SearchMapViewController: UIViewController, UITextFieldDelegate, MKMapViewD
         UdacityClient.sharedInstance().putAStudentLocation(newUniqueKey: StudentInformation.newStudent.newUniqueKey, newFirstName: StudentInformation.newStudent.newFirstName, newLastName: StudentInformation.newStudent.newLastName, newAddress: StudentInformation.newStudent.newAddress, newLat: StudentInformation.newStudent.newLat, newLon: StudentInformation.newStudent.newLon, objectId: StudentInformation.newStudent.objectId, mediaURL: StudentInformation.newStudent.mediaURL){(success, errorString) in
             
             if success == false {
-                print ("put failed 2.")
                 self.alert(message: errorString!)
             } else {
-                print ("put success.")
                 //return to MapsTabBarController
                 self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
             }
